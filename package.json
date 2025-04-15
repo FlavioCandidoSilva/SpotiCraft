@@ -20,6 +20,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "@mikro-orm/migrations": "^6.4.13",
     "@mikro-orm/mysql": "^6.4.13",
     "@mikro-orm/nestjs": "^6.1.1",
     "@nestjs/class-validator": "^0.13.4",
@@ -38,6 +39,7 @@
     "typeorm": "^0.3.22"
   },
   "devDependencies": {
+    "@mikro-orm/cli": "^6.4.13",
     "@nestjs/cli": "^10.0.0",
     "@nestjs/schematics": "^10.0.0",
     "@nestjs/testing": "^11.0.16",
