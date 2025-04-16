@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { createMapper } from './shared/mapper/createMapper';
+import { SongsService } from './songs/services/songs.service';
 
 @Module({
   imports: [],
@@ -12,7 +13,11 @@ import { createMapper } from './shared/mapper/createMapper';
         return mapper;
       },
     },
+    {
+      provide: 'SongsService',
+      useClass: SongsService,
+    },
   ],
-  exports: ['Mapper'],
+  exports: ['Mapper', 'SongsService'],
 })
 export class ApplicationModule {}
