@@ -11,7 +11,8 @@ import {
 import { QueryBuilder } from '@mikro-orm/mysql';
 import { IBaseRepository } from 'src/domain/shared/base.repository.interface';
 import { PaginationQuery } from 'src/domain/pagination-query/entities/pagination-query';
-import { OrderTypeEnum } from 'src/application/data-transfer/shared/filters/enums/order-type.enum';
+import { OrderTypeEnum } from 'src/data-transfer/shared/filters/enums/order-type.enum';
+
 
 export class BaseRepository<TDomain extends object = AnyEntity>
   implements IBaseRepository<TDomain>

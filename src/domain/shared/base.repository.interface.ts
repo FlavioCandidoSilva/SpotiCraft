@@ -1,7 +1,7 @@
 import { AnyEntity, EntityData, FilterQuery, FindOptions, Populate, UpsertOptions } from "@mikro-orm/core";
 import { QueryBuilder } from "@mikro-orm/mysql";
 import { PaginationQuery } from "../pagination-query/entities/pagination-query";
-import { OrderTypeEnum } from "src/application/data-transfer/shared/filters/enums/order-type.enum";
+import { OrderTypeEnum } from "src/data-transfer/shared/filters/enums/order-type.enum";
 
 export abstract class IBaseRepository<TDomain extends object = AnyEntity> {
   abstract create(data: TDomain): Promise<TDomain>;
