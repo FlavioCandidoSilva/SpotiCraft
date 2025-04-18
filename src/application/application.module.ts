@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common';
 import { createMapper } from './shared/mapper/createMapper';
 import { SongsService } from './songs/services/songs.service';
+import { DomainModule } from 'src/domain/domain.module';
 
 @Module({
-  imports: [],
+  imports: [DomainModule],
   providers: [
     {
       provide: 'Mapper',
