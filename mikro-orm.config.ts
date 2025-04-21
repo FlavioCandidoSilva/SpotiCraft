@@ -1,8 +1,7 @@
-import { Options } from '@mikro-orm/core';
-import { MySqlDriver } from '@mikro-orm/mysql';
+import { defineConfig, MySqlDriver } from '@mikro-orm/mysql'; 
 import { SongEntity } from 'src/infrastructure/database/songs/entities/song';
 
-const config: Options = {
+export default defineConfig({
   driver: MySqlDriver,
   host: process.env.DB_HOST || 'localhost',
   port: +(process.env.DB_PORT || 3306),
@@ -14,7 +13,5 @@ const config: Options = {
   migrations: {
     path: 'dist/infrastructure/database/migrations',
     pathTs: 'src/infrastructure/database/migrations',
-  },  
-};
-
-export default config;
+  },
+});
