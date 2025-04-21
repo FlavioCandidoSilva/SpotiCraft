@@ -8,17 +8,18 @@ import { IsAlpha } from 'class-validator';
 
 const services: Provider[] = [
     {
-        provide: ISongsService,
-        useClass: SongsService,
+      provide: ISongsService,
+      useClass: SongsService, 
     },
-];
-
-@Module({
+  ];
+  
+  @Module({
     imports: [InfrastructureModule],
     providers: [...services],
     exports: [
-        InfrastructureModule,
-        ISongsService,
+      InfrastructureModule,
+      ISongsService,
     ],
-})
-export class DomainModule { }
+  })
+export class DomainModule {}
+  
