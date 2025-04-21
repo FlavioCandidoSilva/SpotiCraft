@@ -1,37 +1,60 @@
 import { IEntity } from 'src/domain/shared/entity.interface';
 import { Collection } from '@mikro-orm/mysql';
+import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
 
+@Entity()
 export class Song implements IEntity {
 
+    @PrimaryKey()
     protected id: number;
+    
+    @Property()
     protected title: string;
+    
+    @Property()
     protected duration: number;
-    // protected albumId: Collection;
-    // protected artistsId: Collection;
+    
+    @Property()
+    protected albumId: number;
+    
+    @Property()
+    protected artistsId: number;
+    
+    @Property()
     protected genres: string[];
+    
+    @Property()
     protected url: string;
+    
+    @Property()
     protected explicit: boolean;
+    
+    @Property()
     protected releaseDate: Date;
+    
+    @Property()
     protected createdAt: Date;
+    
+    @Property()
     protected updatedAt: Date;
+    
+    @Property({ nullable: true })
     protected deletedAt: Date | null;
 
     constructor(
-        id: number,
-        title: string,
-        duration: number,
-        // albumId: Collection,
-        // artistsId: Collection,
-        genres: string[],
-        url: string,
-        explicit: boolean,
-        releaseDate: Date,
+        title?: string,
+        duration?: number,
+        albumId?: number,
+        artistsId?: number,
+        genres?: string[],
+        url?: string,
+        explicit?: boolean,
+        releaseDate?: Date,
     ) {
-        this.id = id;
         this.title = title;
         this.duration = duration;
-        // this.albumId = albumId;
-        // this.artistsId = artistsId;
+        this.albumId = albumId;
+        this.artistsId = artistsId;
         this.genres = genres;
         this.url = url;
         this.explicit = explicit;
@@ -52,12 +75,14 @@ export class Song implements IEntity {
     public getDuration(): number {
         return this.duration;
     }
-    // public getAlbumId(): Collection{
-    //     return this.albumId;
-    // }
-    // public getArtistsId(): Collection{
-    //     return this.artistsId;
-    // }
+
+    public getAlbumId(): number {
+        return this.albumId;
+    }
+
+    public getArtistsId(): number {
+        return this.artistsId;
+    }
 
     public getGenres(): string[] {
         return this.genres;
@@ -95,13 +120,19 @@ export class Song implements IEntity {
         this.duration = duration;
     }
 
-    // public setAlbumId(albumId: Collection): void{
-    //     this.albumId = albumId;
-    // }    
+    public setAlbumId(albumId: number): void {
+        this.albumId = albumId;
+    }
+    public setArtistsId(artistsId: number): void {
+        this.artistsId = artistsId;
+    }
+    public setId(id: number): void {
+        this.id = id;
+    }
 
-    // public setArtistsId(artistsId: Collection): void{
-    //     this.artistsId = artistsId;  
-    // }
+    public setArtistId(artistId: number): void {
+        this.artistsId = artistId;
+    }
 
     public setGenres(genres: string[]): void {
         this.genres = genres;
