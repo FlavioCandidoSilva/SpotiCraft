@@ -2,13 +2,14 @@ import { Module, Provider, Scope } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { UnitOfWork } from './shared/unit-of-work';
-import { MySqlDriver } from '@mikro-orm/mysql';
 import { IUnitOfWork } from 'src/domain/shared/unit-of-work.interface';
 import { SongsRepository } from './songs/repositories/songs.repository';
 import { ISongsRepository } from 'src/domain/songs/repositories/songs.repository.interface';
 import { Song } from 'src/domain/songs/entities/song';
+import { MySqlDriver } from '@mikro-orm/mysql';
+import { SongSchema } from './songs/schemas/song.schema';
 
-const entities = [Song];
+const entities = [SongSchema];
 
 const services: Provider[] = [
   {
@@ -19,8 +20,11 @@ const services: Provider[] = [
     },
   },
   {
-    provide: 'ISongsRepository',
-    useClass: SongsRepository,
+    provide: ISongsRepository,
+    scope: Scope.REQUEST,
+    useFactory: () => {
+      return new SongsRepository();
+    }
   },
 ];
 
@@ -49,6 +53,6 @@ const services: Provider[] = [
     MikroOrmModule.forFeature(entities),
   ],
   providers: [...services],
-  exports: [MikroOrmModule, IUnitOfWork, 'ISongsRepository'],
+  exports: [MikroOrmModule, IUnitOfWork, ISongsRepository],
 })
 export class MySQLModule {}

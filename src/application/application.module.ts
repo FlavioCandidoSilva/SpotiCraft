@@ -1,7 +1,20 @@
-import { Module } from '@nestjs/common';
+import { Module, Provider } from '@nestjs/common';
 import { createMapper } from './shared/mapper/createMapper';
-import { SongsService } from './songs/services/songs.service';
 import { DomainModule } from 'src/domain/domain.module';
+import { createSongDtoToSongCreateCommand } from './songs/profiles/songs.profile';
+import { SongsAppService } from './songs/services/songs.service';
+import { ISongsAppService } from '../application/songs/interfaces/songs.app.service.interface'
+
+const services: Provider[] = [
+  {
+    provide:  ISongsAppService,
+    useClass: SongsAppService,
+  }
+]
+
+const profiles = [
+  createSongDtoToSongCreateCommand,
+]
 
 @Module({
   imports: [DomainModule],
@@ -10,15 +23,12 @@ import { DomainModule } from 'src/domain/domain.module';
       provide: 'Mapper',
       useFactory: () => {
         const mapper = createMapper();
-        mapper.register([]); 
+        mapper.register(profiles); 
         return mapper;
       },
     },
-    {
-      provide: 'SongsService',
-      useClass: SongsService,
-    },
+    ...services,
   ],
-  exports: ['Mapper', 'SongsService'],
+  exports: ['Mapper', ISongsAppService],
 })
 export class ApplicationModule {}
