@@ -12,6 +12,12 @@ export class SongEntity {
   duration!: number;
 
   @Property()
+  albumId!: number; 
+
+  @Property()
+  artistsId!: number; 
+
+  @Property({ type: 'json' })
   genres!: string[];
 
   @Property()
