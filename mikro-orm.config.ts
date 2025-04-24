@@ -1,4 +1,7 @@
-import { defineConfig, MySqlDriver } from '@mikro-orm/mysql'; 
+import * as dotenv from 'dotenv';
+dotenv.config();
+
+import { defineConfig, MySqlDriver } from '@mikro-orm/mysql';
 import { SongEntity } from 'src/infrastructure/database/songs/entities/song';
 
 export default defineConfig({
