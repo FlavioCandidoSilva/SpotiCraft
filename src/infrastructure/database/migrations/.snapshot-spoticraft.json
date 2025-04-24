@@ -33,15 +33,35 @@
           "length": null,
           "mappedType": "integer"
         },
-        "genres": {
-          "name": "genres",
-          "type": "text",
+        "album_id": {
+          "name": "album_id",
+          "type": "int",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
           "length": null,
-          "mappedType": "text"
+          "mappedType": "integer"
+        },
+        "artists_id": {
+          "name": "artists_id",
+          "type": "int",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "length": null,
+          "mappedType": "integer"
+        },
+        "genres": {
+          "name": "genres",
+          "type": "json",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "length": null,
+          "mappedType": "json"
         },
         "url": {
           "name": "url",

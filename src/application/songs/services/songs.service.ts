@@ -17,7 +17,7 @@ export class SongsAppService implements ISongsAppService {
     private readonly songsService: ISongsService,
   ) { }
 
-  async create(createSongDto: CreateSongDto): Promise<Song> {
+  async create(createSongDto: CreateSongDto): Promise<void> {
     try {
       const songByTitle = await this.songsRepository.getOne({ title: createSongDto.title});
   
@@ -35,9 +35,10 @@ export class SongsAppService implements ISongsAppService {
 
       const song = await this.songsService.instantiate(command);
 
+      await this.songsRepository.create(song);
+
       await this.unitOfWork.commit();
 
-      return song;
   
     } catch (error) {
       throw new Error(error.message);

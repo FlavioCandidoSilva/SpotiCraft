@@ -20,10 +20,7 @@ export class SongsService implements ISongsService{
         song.setGenres(command.genres);
         song.setUrl(command.url);
         song.setExplicit(command.explicit);
-        song.setCreatedAt(command.createdAt);
-        song.setUpdatedAt(command.updatedAt);
         song.setReleaseDate(command.releaseDate);
-        song.setDeletedAt(command.deletedAt);
         return song;
     }
 }

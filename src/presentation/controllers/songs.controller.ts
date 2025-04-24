@@ -10,7 +10,7 @@ export class SongsController {
   ) {}
 
   @Post()
-  async create(@Body() createSongDto: CreateSongDto): Promise<Song> {
+  async create(@Body() createSongDto: CreateSongDto): Promise<void> {
     return this.songsAppService.create(createSongDto);
   }
 } 

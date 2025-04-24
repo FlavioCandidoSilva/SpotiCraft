@@ -21,7 +21,7 @@ export class Song implements IEntity {
     protected artistsId: number;
     
     @Property()
-    protected genres: string[];
+    protected genres: string;
     
     @Property()
     protected url: string;
@@ -46,7 +46,7 @@ export class Song implements IEntity {
         duration?: number,
         albumId?: number,
         artistsId?: number,
-        genres?: string[],
+        genres?: string,
         url?: string,
         explicit?: boolean,
         releaseDate?: Date,
@@ -84,7 +84,7 @@ export class Song implements IEntity {
         return this.artistsId;
     }
 
-    public getGenres(): string[] {
+    public getGenres(): string {
         return this.genres;
     }
 
@@ -134,7 +134,7 @@ export class Song implements IEntity {
         this.artistsId = artistId;
     }
 
-    public setGenres(genres: string[]): void {
+    public setGenres(genres: string): void {
         this.genres = genres;
     }
 
