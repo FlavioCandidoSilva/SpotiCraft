@@ -1,3 +1,6 @@
+import * as dotenv from 'dotenv';
+dotenv.config();
+
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
@@ -24,10 +27,7 @@ function setupSwagger(app: INestApplication) {
 }
 
 function setupCors(app: INestApplication) {
-  const whitelist = [
-    'http://localhost:3000',
-  ];
-
+  const whitelist = ['http://localhost:3000'];
   app.enableCors({
     allowedHeaders:
       'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept, Observe, Authorization, Access-Control-Allow-Origin',
@@ -52,10 +52,8 @@ async function bootstrap() {
   );
 
   process.env.TZ = 'America/Sao_Paulo'; 
-  
   setupSwagger(app);
   setupCors(app);
-
   await app.listen(3000);
 }
 
