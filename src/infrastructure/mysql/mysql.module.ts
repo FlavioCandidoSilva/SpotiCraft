@@ -8,8 +8,20 @@ import { ISongsRepository } from 'src/domain/songs/repositories/songs.repository
 import { Song } from 'src/domain/songs/entities/song';
 import { MySqlDriver } from '@mikro-orm/mysql';
 import { SongSchema } from './songs/schemas/song.schema';
+import { ArtistsRepository } from './artists/repositories/artists.repository';
+import { IArtistsRepository } from 'src/domain/artists/repositories/artists.repository.interface';
+import { AlbumsRepository } from './albums/repositories/albums.repository';
+import { IAlbumsRepository } from 'src/domain/albums/repositories/albums.repository.interface';
+import { PlaylistsRepository } from './playlists/repositories/playlists.repository';
+import { IPlaylistsRepository } from 'src/domain/playlists/repositories/playlists.repository.interface';
+import { UsersRepository } from './users/repositories/users.repository';
+import { IUsersRepository } from 'src/domain/users/repositories/users.repository.interface';
+import { ArtistSchema } from './artists/schemas/artist.schema';
+import { AlbumSchema } from './albums/schemas/album.schema';
+import { PlaylistSchema } from './playlists/schemas/playlist.schema';
+import { UserSchema } from './users/schemas/user.schema';
 
-const entities = [SongSchema];
+const entities = [SongSchema, ArtistSchema, AlbumSchema, PlaylistSchema, UserSchema];
 
 const services: Provider[] = [
   {
@@ -24,6 +36,34 @@ const services: Provider[] = [
     scope: Scope.REQUEST,
     useFactory: () => {
       return new SongsRepository();
+    }
+  },
+  {
+    provide: IArtistsRepository,
+    scope: Scope.REQUEST,
+    useFactory: () => {
+      return new ArtistsRepository();
+    }
+  },
+  {
+    provide: IAlbumsRepository,
+    scope: Scope.REQUEST,
+    useFactory: () => {
+      return new AlbumsRepository();
+    }
+  },
+  {
+    provide: IPlaylistsRepository,
+    scope: Scope.REQUEST,
+    useFactory: () => {
+      return new PlaylistsRepository();
+    }
+  },
+  {
+    provide: IUsersRepository,
+    scope: Scope.REQUEST,
+    useFactory: () => {
+      return new UsersRepository();
     }
   },
 ];
@@ -53,6 +93,14 @@ const services: Provider[] = [
     MikroOrmModule.forFeature(entities),
   ],
   providers: [...services],
-  exports: [MikroOrmModule, IUnitOfWork, ISongsRepository],
+  exports: [
+    MikroOrmModule, 
+    IUnitOfWork, 
+    ISongsRepository,
+    IArtistsRepository,
+    IAlbumsRepository,
+    IPlaylistsRepository,
+    IUsersRepository
+  ],
 })
 export class MySQLModule {}

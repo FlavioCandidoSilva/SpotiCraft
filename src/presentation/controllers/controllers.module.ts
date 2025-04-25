@@ -1,13 +1,19 @@
 import { Module } from '@nestjs/common';
-import { ApplicationModule } from 'src/application/application.module';
-import { JobsModule } from '../jobs/jobs.module';
 import { SongsController } from './songs.controller';
+import { ApplicationModule } from 'src/application/application.module';
+import { ArtistsController } from './artists.controller';
+import { AlbumsController } from './albums.controller';
+import { PlaylistsController } from './playlists.controller';
+import { UsersController } from './users.controller';
 
 @Module({
-  imports: [
-    ApplicationModule,
-    JobsModule
+  controllers: [
+    SongsController,
+    ArtistsController,
+    AlbumsController,
+    PlaylistsController,
+    UsersController,
   ],
-  controllers: [SongsController],
+  imports: [ApplicationModule],
 })
 export class ControllersModule {}
