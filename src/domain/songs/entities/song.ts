@@ -1,8 +1,10 @@
 import { IEntity } from 'src/domain/shared/entity.interface';
 import { Collection } from '@mikro-orm/mysql';
 import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
+import { Artist } from 'src/domain/artists/entities/artist';
+import { Album } from 'src/domain/albums/entities/album';
 
-@Entity()
+@Entity({ tableName: 'songs' })
 export class Song implements IEntity {
 
     @PrimaryKey()
@@ -40,6 +42,9 @@ export class Song implements IEntity {
     
     @Property({ nullable: true })
     protected deletedAt: Date | null;
+
+    protected artist: Artist;
+    protected album: Album;
 
     constructor(
         title?: string,
@@ -112,6 +117,14 @@ export class Song implements IEntity {
         return this.deletedAt;
     }
 
+    public getArtist(): Artist {
+        return this.artist;
+    }
+
+    public getAlbum(): Album {
+        return this.album;
+    }
+
     public setTitle(title: string): void {
         this.title = title;
     }
@@ -160,6 +173,14 @@ export class Song implements IEntity {
 
     public setDeletedAt(deletedAt: Date | null): void {
         this.deletedAt = deletedAt;
+    }
+
+    public setArtist(artist: Artist): void {
+        this.artist = artist;
+    }
+
+    public setAlbum(album: Album): void {
+        this.album = album;
     }
 
     public equals(entity: IEntity): boolean {
