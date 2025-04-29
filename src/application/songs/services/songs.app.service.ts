@@ -9,6 +9,7 @@ import { ISongsAppService } from '../interfaces/songs.app.service.interface';
 import { ISongsService } from 'src/domain/songs/services/interfaces/songs.service.interface';
 import { UpdateSongDto } from 'src/data-transfer/songs/requests/update-song.dto';
 import { SongUpdateCommand } from 'src/domain/songs/services/commands/song-update.command';
+import { UploadSongDto } from 'src/data-transfer/songs/requests/upload.dto';
 
 @Injectable()
 export class SongsAppService implements ISongsAppService {
@@ -91,5 +92,30 @@ export class SongsAppService implements ISongsAppService {
       await this.unitOfWork.rollback();
       throw new Error(error.message);
     }
+  }
+
+  async uploadSong(file: Express.Multer.File, uploadSongDto: UploadSongDto): Promise<void> {
+
+    try{
+      const findSong = await this.songsRepository.getById(uploadSongDto.songId);
+
+      if(!findSong){
+        throw new NotFoundException(`Song with ID ${uploadSongDto.songId} not found`);
+      }
+      
+      await this.unitOfWork.begin();
+
+      this.songsService.update(findSong, {
+        url: `/uploads/songs/${file.filename}`,
+      });
+
+      await this.unitOfWork.commit();
+
+
+    } catch (error) {
+      await this.unitOfWork.rollback();
+      throw new Error(error.message);
+    }
+    
   }
 } 
