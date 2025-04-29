@@ -3,6 +3,7 @@ import { ISongsService } from './interfaces/songs.service.interface';
 import { SongCreateCommand } from './commands/song-create.command';
 import { Song } from '../entities/song';
 import { SongUpdateCommand } from './commands/song-update.command';
+import { UploadSongDto } from 'src/data-transfer/songs/requests/upload.dto';
 
 @Injectable()
 export class SongsService implements ISongsService{
@@ -53,4 +54,5 @@ export class SongsService implements ISongsService{
         song.setUpdatedAt(new Date());
         return song;
     }
+
 }
