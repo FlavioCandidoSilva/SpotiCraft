@@ -49,21 +49,21 @@ export class Song implements IEntity {
     constructor(
         title?: string,
         duration?: number,
-        albumId?: number,
-        artistsId?: number,
         genres?: string,
         url?: string,
         explicit?: boolean,
         releaseDate?: Date,
+        albumId?: number,
+        artistsId?: number,
     ) {
         this.title = title;
         this.duration = duration;
-        this.albumId = albumId;
-        this.artistsId = artistsId;
         this.genres = genres;
         this.url = url;
         this.explicit = explicit;
         this.releaseDate = releaseDate;
+        this.albumId = albumId;
+        this.artistsId = artistsId;
         this.createdAt = new Date();
         this.updatedAt = new Date();
         this.deletedAt = null;
