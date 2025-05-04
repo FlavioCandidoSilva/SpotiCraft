@@ -22,7 +22,7 @@ export class SongsAppService implements ISongsAppService {
 
   async create(createSongDto: CreateSongDto): Promise<void> {
     try {
-      const songByTitle = await this.songsRepository.getOne({ title: createSongDto.title});
+      const songByTitle = await this.songsRepository.getOne({title: createSongDto.title});
   
       if (songByTitle) {
         throw new Error('Song already exists');
@@ -37,7 +37,6 @@ export class SongsAppService implements ISongsAppService {
       );
 
       const song = await this.songsService.instantiate(command);
-
       await this.songsRepository.create(song);
 
       await this.unitOfWork.commit();
@@ -72,7 +71,6 @@ export class SongsAppService implements ISongsAppService {
       );
 
       this.songsService.update(song, command);
-
       await this.songsRepository.update(song);
 
       await this.unitOfWork.commit();
@@ -95,27 +93,19 @@ export class SongsAppService implements ISongsAppService {
   }
 
   async uploadSong(file: Express.Multer.File, uploadSongDto: UploadSongDto): Promise<void> {
-
-    try{
-      const findSong = await this.songsRepository.getById(uploadSongDto.songId);
-
-      if(!findSong){
-        throw new NotFoundException(`Song with ID ${uploadSongDto.songId} not found`);
-      }
+    try {
+      const song = await this.findOne(uploadSongDto.songId);
       
       await this.unitOfWork.begin();
 
-      this.songsService.update(findSong, {
+      this.songsService.update(song, {
         url: `/uploads/songs/${file.filename}`,
       });
 
       await this.unitOfWork.commit();
-
-
     } catch (error) {
       await this.unitOfWork.rollback();
       throw new Error(error.message);
     }
-    
   }
 } 
