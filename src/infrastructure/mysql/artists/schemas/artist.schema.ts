@@ -14,8 +14,6 @@ export const ArtistSchema = new EntitySchema<Artist>({
       entity: () => Song,
       kind: '1:m',
       mappedBy: (song) => song.artist,
-      orphanRemoval: true,
-      lazy: true,
     },
     createdAt: { type: 'Date' },
     updatedAt: { type: 'Date' },
