@@ -5,9 +5,6 @@ import { Song } from '../entities/song';
 import { SongUpdateCommand } from './commands/song-update.command';
 import { IArtistsRepository } from 'src/domain/artists/repositories/artists.repository.interface';
 import { IAlbumsRepository } from 'src/domain/albums/repositories/albums.repository.interface';
-import { Collection } from '@mikro-orm/core';
-import { Artist } from 'src/domain/artists/entities/artist';
-import { Album } from 'src/domain/albums/entities/album';
 
 @Injectable()
 export class SongsService implements ISongsService {
@@ -30,15 +27,13 @@ export class SongsService implements ISongsService {
             throw new NotFoundException(`Artist with ID ${command.artistsId} not found`);
         }
 
-        const song = new Song(
-            command.title,
-            command.duration,
-            command.genres,
-            command.url,
-            command.explicit,
-            command.releaseDate
-        );
-
+        const song = new Song();
+        song.setTitle(command.title);
+        song.setDuration(command.duration);
+        song.setGenres(command.genres);
+        song.setUrl(command.url);
+        song.setExplicit(command.explicit);
+        song.setReleaseDate(command.releaseDate);
         song.setArtist(artist);
         song.setAlbum(album);
         return song;
