@@ -3,7 +3,7 @@ import { Collection } from '@mikro-orm/core';
 import { Song } from 'src/domain/songs/entities/song';
 import { Entity } from '@mikro-orm/core';
 
-@Entity({ tableName: 'albums' })
+
 export class Album implements IEntity {
 
     protected id: number;

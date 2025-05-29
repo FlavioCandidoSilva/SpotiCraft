@@ -1,6 +1,6 @@
 import { Entity, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
-import { Album } from 'src/domain/albums/entities/album';
-import { Artist } from 'src/domain/artists/entities/artist';
+import { ArtistEntity } from '../../artists/entities/artist';
+import { AlbumEntity } from '../../albums/entities/album';
 
 @Entity({ tableName: 'songs' })
 export class SongEntity {
@@ -13,11 +13,11 @@ export class SongEntity {
   @Property()
   duration!: number;
 
-  @ManyToOne(() => Album)
-  albumId: Album;
+  @ManyToOne(() => AlbumEntity)
+  albumId: AlbumEntity;
 
-  @ManyToOne(() => Artist)
-  artistId: Artist;
+  @ManyToOne(() => ArtistEntity)
+  artistId: ArtistEntity;
 
   @Property({ type: 'json' })
   genres!: string[];

@@ -7,12 +7,12 @@ import { diskStorage } from 'multer';
 import { extname } from 'path';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UploadSongDto } from 'src/data-transfer/songs/requests/upload.dto';
-
+import { ApiConsumes, ApiBody } from '@nestjs/swagger';
 @Controller('songs')
 export class SongsController {
   constructor(
     private readonly songsAppService: ISongsAppService,
-  ) {}
+  ) { }
 
   @Post()
   async create(@Body() createSongDto: CreateSongDto): Promise<void> {
@@ -40,20 +40,29 @@ export class SongsController {
   }
 
   @Post('upload')
-  @UseInterceptors(FileInterceptor('file', {
-    storage: diskStorage({
-      destination: './uploads/songs',
-      filename: (req, file, cb) => {
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-        const ext = extname(file.originalname);
-        cb(null, `${file.fieldname}-${uniqueSuffix}${ext}`);
+  @UseInterceptors(FileInterceptor('file'))
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        file: {
+          type: 'string',
+          format: 'binary',
+        },
+        songId: {
+          type: 'string',
+          example: '1',
+        },
       },
-    }),
-  }))
+    },
+  })
   async uploadSong(
     @UploadedFile() file: Express.Multer.File,
-    @Body() uploadSongDto: UploadSongDto
+    @Body() uploadSongDto: UploadSongDto,
   ) {
     return this.songsAppService.uploadSong(file, uploadSongDto);
   }
+
+
 } 

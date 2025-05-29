@@ -17,7 +17,7 @@ export const SongSchema = new EntitySchema<Song>({
     artist: {
       entity: () => Artist,
       kind: 'm:1',
-      joinColumn: 'artists_id',
+      joinColumn: 'artist_id',
       inversedBy: 'songs',
     },
     album: {

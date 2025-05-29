@@ -10,6 +10,7 @@ import { ISongsService } from 'src/domain/songs/services/interfaces/songs.servic
 import { UpdateSongDto } from 'src/data-transfer/songs/requests/update-song.dto';
 import { SongUpdateCommand } from 'src/domain/songs/services/commands/song-update.command';
 import { UploadSongDto } from 'src/data-transfer/songs/requests/upload.dto';
+import { AwsS3Service } from 'src/infrastructure/aws/aws-s3.service';
 
 @Injectable()
 export class SongsAppService implements ISongsAppService {
@@ -18,6 +19,7 @@ export class SongsAppService implements ISongsAppService {
     private readonly songsRepository: ISongsRepository,
     private readonly unitOfWork: IUnitOfWork,
     private readonly songsService: ISongsService,
+    private readonly s3Service: AwsS3Service,
   ) { }
 
   async create(createSongDto: CreateSongDto): Promise<void> {
@@ -92,14 +94,15 @@ export class SongsAppService implements ISongsAppService {
     }
   }
 
-  async uploadSong(file: Express.Multer.File, uploadSongDto: UploadSongDto): Promise<void> {
+ async uploadSong(file: Express.Multer.File, uploadSongDto: UploadSongDto): Promise<void> {
     try {
       const song = await this.findOne(uploadSongDto.songId);
-      
+      const s3Url = await this.s3Service.uploadFile(file.buffer, file.originalname, file.mimetype);
+
       await this.unitOfWork.begin();
 
       this.songsService.update(song, {
-        url: `/uploads/songs/${file.filename}`,
+        url: s3Url, 
       });
 
       await this.unitOfWork.commit();
