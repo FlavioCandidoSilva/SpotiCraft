@@ -10,4 +10,5 @@ export abstract class ISongsAppService {
   abstract update(id: number, updateSongDto: UpdateSongDto): Promise<void>;
   abstract remove(id: number): Promise<void>;
   abstract uploadSong(file: Express.Multer.File, uploadSongDto: UploadSongDto): Promise<void>;
+  abstract getSignedUrlAWS(songId: number): Promise<string>;
 } 

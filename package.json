@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.817.0",
+    "@aws-sdk/s3-request-presigner": "^3.820.0",
     "@mikro-orm/migrations": "^6.4.13",
     "@mikro-orm/mysql": "^6.4.13",
     "@mikro-orm/nestjs": "^6.1.1",

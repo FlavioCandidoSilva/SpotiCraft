@@ -24,17 +24,17 @@ export class SongsAppService implements ISongsAppService {
 
   async create(createSongDto: CreateSongDto): Promise<void> {
     try {
-      const songByTitle = await this.songsRepository.getOne({title: createSongDto.title});
-  
+      const songByTitle = await this.songsRepository.getOne({ title: createSongDto.title });
+
       if (songByTitle) {
         throw new Error('Song already exists');
       }
 
       await this.unitOfWork.begin();
-  
+
       const command = this.mapper.map<'CreateSongDto', CreateSongDto, 'SongCreateCommand', SongCreateCommand>(
         'CreateSongDto',
-        createSongDto, 
+        createSongDto,
         'SongCreateCommand'
       );
 
@@ -94,7 +94,7 @@ export class SongsAppService implements ISongsAppService {
     }
   }
 
- async uploadSong(file: Express.Multer.File, uploadSongDto: UploadSongDto): Promise<void> {
+  async uploadSong(file: Express.Multer.File, uploadSongDto: UploadSongDto): Promise<void> {
     try {
       const song = await this.findOne(uploadSongDto.songId);
       const s3Url = await this.s3Service.uploadFile(file.buffer, file.originalname, file.mimetype);
@@ -102,7 +102,7 @@ export class SongsAppService implements ISongsAppService {
       await this.unitOfWork.begin();
 
       this.songsService.update(song, {
-        url: s3Url, 
+        url: s3Url,
       });
 
       await this.unitOfWork.commit();
@@ -110,5 +110,18 @@ export class SongsAppService implements ISongsAppService {
       await this.unitOfWork.rollback();
       throw new Error(error.message);
     }
+  }
+
+  async getSignedUrlAWS(songId: number): Promise<string> {
+
+    const song = await this.findOne(songId);
+
+    if (!song.getUrl()) {
+      throw new NotFoundException(`Song with ID ${songId} does not have a URL`);
+    }
+
+    const signedUrl = await this.s3Service.getSignedUrlFromUrlPath(song.getUrl().split('/').pop());
+
+    return signedUrl;
   }
 } 
