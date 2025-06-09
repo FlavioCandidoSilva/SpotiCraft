@@ -15,6 +15,7 @@ export const createUserDtoToUserCreateCommand = createProfile<
     username: user.username,
     email: user.email,
     password: user.password,
+    confirmPassword: user.confirmPassword,
   }),
 );
 
@@ -29,5 +30,6 @@ export const updateUserDtoToUserUpdateCommand = createProfile<
     username: user.username,
     email: user.email,
     password: user.password,
+    confirmPassword: user.confirmPassword,
   }),
 ); 

@@ -18,4 +18,10 @@ export class UpdateUserDto {
   @IsOptional()
   @ApiProperty({ description: 'The password of the user', example: 'password', required: false })
   password?: string;
+
+  @IsString()
+  @MinLength(6)
+  @IsOptional()
+  @ApiProperty({ description: 'The confirm password of the user', example: 'confirm password', required: false })
+  confirmPassword?: string;
 } 

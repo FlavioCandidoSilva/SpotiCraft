@@ -23,10 +23,20 @@ services:
       RABBITMQ_DEFAULT_PASS: admin
     ports:
       - "5673:5672"
-      - "15673:15672"  
+      - "15673:15672"
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
+
+  redis:
+    image: redis:7
+    container_name: redis-container
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
 
 volumes:
   mysql_data:
   rabbitmq_data:
+  redis_data:

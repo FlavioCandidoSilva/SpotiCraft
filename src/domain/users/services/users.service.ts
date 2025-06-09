@@ -3,6 +3,7 @@ import { IUsersService } from './interfaces/users.service.interface';
 import { UserCreateCommand } from './commands/user-create.command';
 import { User } from '../entities/user';
 import { UserUpdateCommand } from './commands/user-update.command';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService implements IUsersService {
@@ -13,8 +14,17 @@ export class UsersService implements IUsersService {
         const user = new User();
         user.setUsername(command.username);
         user.setEmail(command.email);
-        user.setPassword(command.password);
+        this.verifyPassword(command);
+        const hashedPassword = bcrypt.hashSync(command.password, 10);
+        user.setPassword(hashedPassword);
         return user;
+    }
+
+    public verifyPassword(command): boolean {
+        if(command.password !== command.confirmPassword) {
+            throw new Error('Passwords do not match');
+        }
+        return true;
     }
 
     public update(user: User, command: UserUpdateCommand): User {
@@ -25,7 +35,9 @@ export class UsersService implements IUsersService {
             user.setEmail(command.email);
         }
         if (command.password) {
-            user.setPassword(command.password);
+            this.verifyPassword(command);
+            const hashedPassword = bcrypt.hashSync(command.password, 10);
+            user.setPassword(hashedPassword);
         }
         user.setUpdatedAt(new Date());
         return user;
