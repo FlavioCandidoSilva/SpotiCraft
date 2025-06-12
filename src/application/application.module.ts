@@ -16,6 +16,9 @@ import { createArtistDtoToArtistCreateCommand, updateArtistDtoToArtistUpdateComm
 import { createAlbumDtoToAlbumCreateCommand, updateAlbumDtoToAlbumUpdateCommand } from './albums/profiles/albums.profile';
 import { createPlaylistDtoToPlaylistCreateCommand, updatePlaylistDtoToPlaylistUpdateCommand } from './playlists/profiles/playlists.profile';
 import { createUserDtoToUserCreateCommand, updateUserDtoToUserUpdateCommand } from './users/profiles/users.profile';
+import { IAuthAppService } from './auth/services/interfaces/auths.app.service.interface';
+import { AuthsAppService } from './auth/services/auths.app.service';
+import { JwtModule } from '@nestjs/jwt';
 
 const services: Provider[] = [
   {
@@ -37,6 +40,10 @@ const services: Provider[] = [
   {
     provide: IUsersAppService,
     useClass: UsersAppService,
+  },
+  {
+    provide: IAuthAppService,
+    useClass: AuthsAppService,
   }
 ]
 
@@ -54,25 +61,32 @@ const profiles = [
 ]
 
 @Module({
-  imports: [DomainModule],
+  imports: [
+    DomainModule,
+    JwtModule.register({
+      secret: process.env.JWT_SECRET,
+      signOptions: { expiresIn: '15m' },
+    }),
+  ],
   providers: [
     {
       provide: 'Mapper',
       useFactory: () => {
         const mapper = createMapper();
-        mapper.register(profiles); 
+        mapper.register(profiles);
         return mapper;
       },
     },
     ...services,
   ],
   exports: [
-    'Mapper', 
-    ISongsAppService, 
-    IArtistsAppService, 
-    IAlbumsAppService, 
-    IPlaylistsAppService, 
-    IUsersAppService
+    'Mapper',
+    ISongsAppService,
+    IArtistsAppService,
+    IAlbumsAppService,
+    IPlaylistsAppService,
+    IUsersAppService,
+    IAuthAppService
   ],
 })
-export class ApplicationModule {}
+export class ApplicationModule { }

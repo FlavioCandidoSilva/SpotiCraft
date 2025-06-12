@@ -2,64 +2,42 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { IUsersAppService } from 'src/application/users/interfaces/users.app.service.interface';
 import { RedisService } from 'src/infrastructure/redis/redis.service';
+import { IAuthAppService } from './interfaces/auths.app.service.interface';
 import * as bcrypt from 'bcrypt';
+import { LoginDto } from 'src/data-transfer/auth/requests/login.dto';
 
 @Injectable()
-export class AuthAppService {
+export class AuthsAppService implements IAuthAppService {
   constructor(
     private readonly jwtService: JwtService,
     private readonly redisService: RedisService,
     private readonly usersAppService: IUsersAppService,
-  ) {}
+  ) { }
 
-  
-  async validateUser(email: string, password: string): Promise<any> {
-    const user = await this.usersAppService.findByEmail(email);
 
-    if (!user) {
-      throw new UnauthorizedException('Invalid credentials');
+  async login(loginDto: LoginDto): Promise<{ accessToken: string; refreshToken: string }> {
+
+    const user = await this.usersAppService.findByEmail(loginDto.email);
+
+    if (!user || !(await bcrypt.compare(loginDto.password, user.getPassword()))) {
+      throw new UnauthorizedException('Email ou senha inválidos');
     }
 
-    const passwordIsValid = await bcrypt.compare(password, user.getPassword());
-    if (!passwordIsValid) {
-      throw new UnauthorizedException('Invalid credentials');
-    }
+    const payload = { sub: user.getId(), email: user.getEmail() };
+    const accessToken = this.jwtService.sign(payload, { expiresIn: '15m' });
+    const refreshToken = this.jwtService.sign(payload, { expiresIn: '7d' });
 
-    return {
-      id: user.getId(),
-      email: user.getEmail(),
-      username: user.getUsername(),
-    };
+    await this.redisService.set(`refresh:${user.getId()}`, refreshToken, 7 * 24 * 60 * 60);
+
+    return { accessToken, refreshToken };
   }
 
-  async login(user: any) {
-
-    const payload = { username: user.username, sub: user.id };
-    const token = this.jwtService.sign(payload, { expiresIn: '1h' });
-
-    await this.redisService.set(`auth:${user.id}`, token, 3600);
-
-    return { access_token: token };
+  async validateRefreshToken(userId: number, token: string): Promise<boolean> {
+    const storedToken = await this.redisService.get(`refresh:${userId}`);
+    return storedToken === token;
   }
 
- 
-  async validateToken(token: string): Promise<any> {
-    try {
-      const decoded: any = this.jwtService.decode(token);
-      const userId = decoded?.sub;
-
-      const storedToken = await this.redisService.get(`auth:${userId}`);
-      if (!storedToken || storedToken !== token) {
-        throw new UnauthorizedException();
-      }
-      return this.jwtService.verify(token);
-    } catch (error) {
-      throw new UnauthorizedException('Token inválido ou expirado');
-    }
-  }
-
-
-  async logout(userId: string) {
-    await this.redisService.del(`auth:${userId}`);
+  async logout(userId: number) {
+    await this.redisService.del(`refresh:${userId}`);
   }
 }

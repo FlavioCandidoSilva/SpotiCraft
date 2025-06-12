@@ -303,20 +303,20 @@
           "length": null,
           "mappedType": "integer"
         },
-        "album_id": {
-          "name": "album_id",
+        "album_id_id": {
+          "name": "album_id_id",
           "type": "int",
-          "unsigned": false,
+          "unsigned": true,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
           "length": null,
           "mappedType": "integer"
         },
-        "artists_id": {
-          "name": "artists_id",
+        "artist_id_id": {
+          "name": "artist_id_id",
           "type": "int",
-          "unsigned": false,
+          "unsigned": true,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
@@ -397,6 +397,26 @@
       "name": "songs",
       "indexes": [
         {
+          "columnNames": [
+            "album_id_id"
+          ],
+          "composite": false,
+          "keyName": "songs_album_id_id_index",
+          "constraint": false,
+          "primary": false,
+          "unique": false
+        },
+        {
+          "columnNames": [
+            "artist_id_id"
+          ],
+          "composite": false,
+          "keyName": "songs_artist_id_id_index",
+          "constraint": false,
+          "primary": false,
+          "unique": false
+        },
+        {
           "keyName": "PRIMARY",
           "columnNames": [
             "id"
@@ -408,7 +428,32 @@
         }
       ],
       "checks": [],
-      "foreignKeys": {},
+      "foreignKeys": {
+        "songs_album_id_id_foreign": {
+          "constraintName": "songs_album_id_id_foreign",
+          "columnNames": [
+            "album_id_id"
+          ],
+          "localTableName": "songs",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "albums",
+          "updateRule": "cascade"
+        },
+        "songs_artist_id_id_foreign": {
+          "constraintName": "songs_artist_id_id_foreign",
+          "columnNames": [
+            "artist_id_id"
+          ],
+          "localTableName": "songs",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "artists",
+          "updateRule": "cascade"
+        }
+      },
       "nativeEnums": {}
     },
     {

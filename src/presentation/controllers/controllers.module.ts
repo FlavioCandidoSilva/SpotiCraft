@@ -5,6 +5,7 @@ import { ArtistsController } from './artists.controller';
 import { AlbumsController } from './albums.controller';
 import { PlaylistsController } from './playlists.controller';
 import { UsersController } from './users.controller';
+import { AuthsController } from './auths.controller';
 
 @Module({
   controllers: [
@@ -13,6 +14,8 @@ import { UsersController } from './users.controller';
     AlbumsController,
     PlaylistsController,
     UsersController,
+    AuthsController
+
   ],
   imports: [ApplicationModule],
 })
